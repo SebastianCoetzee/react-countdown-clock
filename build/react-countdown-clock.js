@@ -64,6 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _fraction: null,
 	  _content: null,
 	  _canvas: null,
+	  _end: null,
 	  propTypes: {
 	    seconds: React.PropTypes.number,
 	    size: React.PropTypes.number,
@@ -84,6 +85,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  componentDidMount: function() {
 	    this._seconds = this.props.seconds;
+	    this._end = Date.now() + (this._seconds * 1000);
 	    return this._setupTimer();
 	  },
 	  _setupTimer: function() {
@@ -99,7 +101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _setScale: function() {
 	    this._radius = this.props.size / 2;
 	    this._fraction = 2 / this._seconds;
-	    return this._tickPeriod = this._seconds * 1.8;
+	    return this._tickPeriod = this._seconds * 18;
 	  },
 	  _setupCanvas: function() {
 	    this._canvas = this.getDOMNode();
@@ -116,17 +118,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    })(this)), 200);
 	  },
 	  _tick: function() {
-	    var start;
-	    start = Date.now();
 	    return setTimeout(((function(_this) {
 	      return function() {
-	        var duration;
-	        duration = (Date.now() - start) / 1000;
-	        _this._seconds -= duration;
+	        _this._seconds = (_this._end - Date.now()) / 1000;
 	        if (_this._seconds <= 0) {
 	          _this._seconds = 0;
-	          _this._handleComplete();
-	          return _this._clearTimer();
+	          _this._clearTimer();
+	          return _this._handleComplete();
 	        } else {
 	          _this._updateCanvas();
 	          return _this._tick();
@@ -176,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 

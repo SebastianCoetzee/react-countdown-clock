@@ -6,7 +6,8 @@ module.exports = React.createClass
   _fraction: null
   _content: null
   _canvas: null
-  
+  _end: null
+
   propTypes:
     seconds: React.PropTypes.number
     size: React.PropTypes.number
@@ -25,6 +26,7 @@ module.exports = React.createClass
 
   componentDidMount: ->
     @_seconds = @props.seconds
+    @_end = Date.now() + (@_seconds * 1000);
     @_setupTimer()
 
   _setupTimer: ->
@@ -40,7 +42,7 @@ module.exports = React.createClass
   _setScale: ->
     @_radius     = @props.size / 2
     @_fraction   = 2 / @_seconds
-    @_tickPeriod = @_seconds * 1.8
+    @_tickPeriod = @_seconds * 18
 
   _setupCanvas: ->
     @_canvas  = @getDOMNode()
@@ -54,15 +56,13 @@ module.exports = React.createClass
     setTimeout ( => @_tick() ), 200
 
   _tick: ->
-    start = Date.now()
     setTimeout ( =>
-      duration = (Date.now() - start) / 1000
-      @_seconds -= duration
+      @_seconds = (@_end - Date.now())/1000
 
       if @_seconds <= 0
         @_seconds = 0
-        @_handleComplete()
         @_clearTimer()
+        @_handleComplete()
       else
         @_updateCanvas()
         @_tick()
